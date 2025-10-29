@@ -10,9 +10,9 @@ fixed_version = "1.1.0"  # fixed Hudi jar version
 batch_id = 1  # same parquet dataset used for both
 
 # Base paths
-base_parquet_dir = Path("/Users/onehouse/data/timestamp/raw_parquet")
-base_hudi_dir = Path("/Users/onehouse/data/timestamp/hudi_tables")
-results_dir = Path("/Users/onehouse/data/timestamp/results")
+base_parquet_dir = Path("/opt/onehouse/data/timestamp/raw_parquet")
+base_hudi_dir = Path("/opt/onehouse/data/timestamp/hudi_tables")
+results_dir = Path("/opt/onehouse/data/timestamp/results")
 results_dir.mkdir(exist_ok=True)
 
 # 8 configuration combinations
@@ -21,8 +21,8 @@ row_writer_options = ["BULK_INSERT", "UPSERT"]
 schema_provider_options = ["file", "null"]
 
 # JAR sets
-JARS_FILE_PROVIDER = "/path/to/file_schema/spark-hudi-3.4-bundle.jar,/path/to/file_schema/hudi-utilities-slim-bundle.jar"
-JARS_NULL_PROVIDER = "/path/to/null_schema/spark-hudi-3.4-bundle.jar,/path/to/null_schema/hudi-utilities-slim-bundle.jar"
+JARS_FILE_PROVIDER = "/opt/jars/null/hudi-spark3.4-bundle_2.12-1.2.0-SNAPSHOT.jar,/opt/jars/null/hudi-utilities-slim-bundle_2.12-1.2.0-SNAPSHOT.jar"
+JARS_NULL_PROVIDER = "/opt/jars/null/hudi-spark3.4-bundle_2.12-1.2.0-SNAPSHOT.jar,/opt/jars/null/hudi-utilities-slim-bundle_2.12-1.2.0-SNAPSHOT.jar"
 
 summary_csv = results_dir / "timestamp_summary.csv"
 
@@ -44,14 +44,15 @@ def select_jars(schema_provider: str) -> str:
 def run_generate_parquet():
     """Generate Parquet source data once."""
     print("\n🧱 Generating Parquet data (batchId=1) ...")
+    jar_path = select_jars("file")
     run([
         "spark-shell", "-i", "scripts/generate_parquet.scala",
+        "--jars", jar_path,
         "--conf", f"spark.driver.extraJavaOptions=-DbatchId={batch_id}"
     ])
 
 def run_hudi_streamer(version, table_name, transformer, row_writer, schema_provider):
     """Run Hudi streamer for one configuration."""
-    jar_path = select_jars(schema_provider)
     print(f"\n🚀 Running Hudi Streamer (v{version}) for table {table_name} with schema provider {schema_provider}")
     transformer_flag = "true" if transformer else "false"
     run([
@@ -117,10 +118,10 @@ with open(summary_csv, mode="w", newline="") as csvfile:
                 })
 
     # -------------------------------------------------
-    # STEP 3 : Batch 2 (Hudi 1.1.0 Fixed) - Reuse same tables
+    # STEP 3 : Batch 2 (Hudi 1.2.0 Fixed) - Reuse same tables
     # -------------------------------------------------
     print("\n====================")
-    print("🔧 Running FIXED (1.1.0) streamer on same tables")
+    print("🔧 Running FIXED (1.2.0) streamer on same tables")
     print("====================\n")
 
     for transformer in transformer_options:
