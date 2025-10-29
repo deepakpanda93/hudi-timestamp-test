@@ -23,3 +23,4 @@ new PrintWriter(schemaOut) { write(df.schema.json); close() }
 df.coalesce(1).write.mode("overwrite").json(dataOut)
 
 println(s"Read fixed Hudi for $tableName batch $batchId -> schema: $schemaOut, data: $dataOut")
+System.exit(0)
