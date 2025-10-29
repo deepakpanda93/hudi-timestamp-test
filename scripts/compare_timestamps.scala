@@ -35,3 +35,4 @@ if (diffs.isEmpty) {
 pw.close()
 
 println(s"Timestamp comparison complete. See diff report: $diffPath")
+System.exit(0)
