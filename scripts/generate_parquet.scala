@@ -37,7 +37,7 @@ val df = spark.createDataFrame(spark.sparkContext.parallelize(rows), schema)
 
 // Output folder for batch
 val outDir = s"file:///opt/onehouse/data/timestamp/raw_parquet/"
-df.repartition(1).write.mode("overwrite").parquet(outDir)
+df.repartition(1).write.mode("append").parquet(outDir)
 
 println(s"Batch $batchId Parquet written to $outDir")
 System.exit(0)
