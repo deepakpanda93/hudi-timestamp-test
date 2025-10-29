@@ -1,0 +1,41 @@
+{
+  "type": "record",
+  "name": "event_record",
+  "namespace": "com.example.hudi",
+  "fields": [
+    {
+      "name": "id",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "event_name",
+      "type": ["null", "string"],
+      "default": null
+    },
+    {
+      "name": "ts_millis",
+      "type": ["null", {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }],
+      "default": null
+    },
+    {
+      "name": "ts_micros",
+      "type": ["null", {
+        "type": "long",
+        "logicalType": "timestamp-micros"
+      }],
+      "default": null
+    },
+    {
+      "name": "local_ts",
+      "type": ["null", {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }],
+      "default": null
+    }
+  ]
+}
