@@ -29,7 +29,7 @@ EXTRA_OPTS=()
 if [[ "$USE_TRANSFORMER" == "true" ]]; then
   EXTRA_OPTS+=(
     --transformer-class org.apache.hudi.utilities.transform.SqlQueryBasedTransformer
-    --hoodie-conf "hoodie.streamer.transformer.sql=SELECT id, event_name, ts_millis, ts_micros, local_ts FROM parquet.`/opt/onehouse/data/timestamp/raw_parquet`"
+    --hoodie-conf "hoodie.streamer.transformer.sql=SELECT id, event_name, ts_millis, ts_micros, local_ts FROM parquet.\`/opt/onehouse/data/timestamp/raw_parquet\`"
   )
 fi
 
