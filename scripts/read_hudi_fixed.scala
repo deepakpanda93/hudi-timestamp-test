@@ -9,14 +9,14 @@ val spark = SparkSession.builder()
   .master("local[*]")
   .getOrCreate()
 
-val tablePath = s"file:///tmp/data/hudi_tables/${tableName}_1.1.0_batch${batchId}"
+val tablePath = s"file:///opt/onehouse/data/timestamp/hudi_tables/${tableName}"
 
 // Read Hudi table
 val df = spark.read.format("hudi").load(tablePath + "/*")
 
 // Save schema + data for comparison
-val schemaOut = s"/tmp/results/comparison/${tableName}_batch${batchId}_schema.json"
-val dataOut = s"/tmp/results/comparison/${tableName}_batch${batchId}_data.json"
+val schemaOut = s"/opt/onehouse/data/timestamp/results/${tableName}}_schema.json"
+val dataOut = s"/opt/onehouse/data/timestamp/results/${tableName}_data.json"
 
 df.schema.json // save schema
 new PrintWriter(schemaOut) { write(df.schema.json); close() }
